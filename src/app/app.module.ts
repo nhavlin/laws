@@ -11,6 +11,8 @@ import { ToastModule } from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
   // import {MatInputModule} from '@angular/material/input'
   import {InputTextModule} from 'primeng/inputtext';
+import { LawComponent } from './law/05-ui/law/law.component';
+
 
 
 @NgModule({
@@ -25,7 +27,7 @@ import { PanelModule } from 'primeng/panel';
     ReactiveFormsModule
     ,InputTextModule
   ],
-  declarations: [AppComponent],
+  declarations: [AppComponent, LawComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

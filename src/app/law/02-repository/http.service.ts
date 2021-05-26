@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { TreeNode } from 'primeng/api';
-import { Ilaw } from './Ilaw.interface';
+import { Ilaw } from '../01-domain/Ilaw.interface';
 
 @Injectable({ providedIn: 'root' })
 export class HttpService {

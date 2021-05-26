@@ -10,8 +10,9 @@ import {
   startWith,
   tap
 } from 'rxjs/operators';
-import { HttpService } from './http.service';
-import { Ilaw } from './Ilaw.interface';
+import { HttpService } from './law/02-repository/http.service';
+import { Ilaw } from './law/01-domain/Ilaw.interface';
+import { LawViewService } from './law/04-select-view/law-view.service';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +42,8 @@ export class AppComponent {
 
   constructor(
     private messageService: MessageService,
-    private http: HttpService
+    private http: HttpService,
+    private lawViewService:LawViewService
   ) {}
 
   ngOnInit() {
@@ -51,22 +53,25 @@ export class AppComponent {
      
       ();
 
-    this.result$ = combineLatest([this.searchInput$, this.dataSearch$]).pipe(
+      this.lawData$ = this.http.getLawData().pipe(
+        map(data => this.lawViewService.flatme(data))
+      );
+
+    this.result$ = combineLatest([this.searchInput$, this.lawData$]).pipe(
       map(([search, data]) => {
+        console.log(data)
         if (search) {
-          return data[0].children.filter(single =>
+          return data.filter(single =>
             single.label.includes(search)
           );
         } else {
           return data;
         }
       })
+       ,tap(console.log )
     );
 
-    this.lawData$ = this.http.getLawData().pipe(
-      tap(console.log),
-      map(data => this.flatme(data))
-    );
+    
 
     this.data$ = this.http.getData().pipe(tap(data => (this.data1 = data)));
   }
@@ -78,47 +83,5 @@ export class AppComponent {
       detail: event.node.label
     });
   }
-
-  flatme(data: Ilaw[]): TreeNode[] {
-    console.error('flatme', data);
-    let result: TreeNode[] = [];
-    data.forEach(single => {
-      let node: TreeNode = {
-        label: single.LawName,
-        expanded: true,
-        styleClass:"law",
-        type:"law",
-        data: {
-          LawUri: single.LawUri,
-          componentNum: ''
-        },
-        children: single.Components.map(comp => {
-          return <TreeNode>{
-            label: comp.eId,
-            expanded: true,
-            styleClass:"component",
-        type:"component",
-
-            data: {
-              LawUri: '',
-              componentNum: comp.componentNum
-            },
-            children: comp.refTo.map(ref => {
-              return <TreeNode>{
-                label: ref.refTo_eId,
-                expanded: true,
-            styleClass:"refTo",
-        type:"refTo",
-
-              };
-            })
-          };
-        })
-      };
-
-      result.push(node);
-    });
-    console.log('result', result);
-    return result;
-  }
+  
 }
