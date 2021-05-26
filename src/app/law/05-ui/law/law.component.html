@@ -1,1 +1,42 @@
-<p>law works!</p>
+<p-toast [style]="{marginTop: '80px'}"></p-toast>
+<div style="direction:rtl;">
+  <h1>משפטנט</h1>
+
+  <div>
+     <span class="p-float-label">
+         <span class=p-input-icon-left >  
+          <!-- <i class="pi pi-spin pi-spinner"></i> -->
+    <input  type="text" pInputText [formControl]="searchInput" placeholder="הזן שם חוק" >   
+    <!-- לדוג':חוק העונשין  -->
+    <span>/</span>
+          <input type="text" pInputText [formControl]="searchInput" placeholder="  הזן מספר סעיף" >  
+               
+          <!-- <p-autoComplete [formControl]="searchInput" [suggestions]="dataSearch$|async" ></p-autoComplete> -->
+
+      </span> 
+    </span>
+  </div>
+</div>
+<div *ngIf="lawData$|async"> <!--wait until recive data-->  
+  <p-organizationChart [value]="result$|async" selectionMode="single" [(selection)]="selectedNode"
+    (onNodeSelect)="onNodeSelect($event)" styleClass="company">
+    <ng-template let-node pTemplate="law">
+      <div class="node-header p-corner-top">מזהה חוק : {{node.label}}</div>
+      <div class="node-content">
+        <div>שם החוק : {{node.data.LawName}}</div>
+      </div>
+    </ng-template>
+    <ng-template let-node pTemplate="component">
+      <div class="node-header p-corner-top">פניה לסעיף הנבחר מחוק / סעיף</div>
+      <div class="node-content">
+        <div>{{node.label}}</div>
+      </div>
+    </ng-template>
+    <ng-template let-node pTemplate="refTo">
+        <div class="node-header p-corner-top"> מפנה אל חוק / סעיף </div>
+        <div class="node-content">
+          <div>{{node.label}}</div>
+        </div>
+    </ng-template>
+  </p-organizationChart>
+</div>

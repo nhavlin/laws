@@ -1,4 +1,4 @@
-
+//מבנה הנתונים המתקבל מקובץ law.json
 export interface IrefTo {
   // id: string;
   refTo_eId: string;

@@ -1,6 +1,7 @@
+//transform data
 import { Injectable } from '@angular/core';
 import { TreeNode } from 'primeng/api';
-import { Ilaw } from '../01-domain/Ilaw.interface';
+import { Ilaw } from '../01-domain/law.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -9,23 +10,23 @@ export class LawViewService {
 
   constructor() { }
 
-  
+  //המרה מהמבנה שהתקבל בוקבץ הנתונים למבנה הנדרש ע"י הפקד לתצוגה מתבצעת בקובץ
   flatme(data: Ilaw[]): TreeNode[] {
     // console.error('flatme', data);
     let result: TreeNode[] = [];
     data.forEach(single => {
       let node: TreeNode = {
-        label: single.LawName,
+        label:  single.LawUri.toString(),
         expanded: true,
         styleClass:"law",
         type:"law",
         data: {
-          LawUri: single.LawUri,
+          LawName: single.LawName,
           componentNum: ''
         },
         children: single.Components.map(comp => {
           return <TreeNode>{
-            label: comp.eId,
+            label:  comp.eId,
             expanded: true,
             styleClass:"component",
         type:"component",
